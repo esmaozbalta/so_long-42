@@ -1,48 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   game_finish.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esozbalt <esozbalt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 16:42:47 by esozbalt          #+#    #+#             */
-/*   Updated: 2024/07/09 16:45:59 by esozbalt         ###   ########.fr       */
+/*   Created: 2024/07/09 16:42:38 by esozbalt          #+#    #+#             */
+/*   Updated: 2024/07/09 16:42:41 by esozbalt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	ft_print_error(t_so_long	*so_long)
+int	close_game(t_so_long	*so_long)
 {
 	int	i;
 
 	i = 0;
-	ft_printf("Map Error!");
+	ft_printf("Game Closed\n");
 	while (so_long->map[i])
 	{
 		free(so_long->map[i]);
 		i++;
 	}
 	free(so_long->map);
-	exit (1);
+	exit(1);
 }
 
-void	ft_error(t_so_long	*so_long)
+void	win_game(t_so_long	*so_long)
 {
 	int	i;
 
 	i = 0;
-	ft_printf("Map Error!");
-	while (so_long->map_cpy[i])
+	ft_printf("You Win! Congratulations!\n");
+	while (so_long->map[i])
 	{
-		if (so_long->map_cpy[i] != NULL)
-		{
-			free(so_long->map_cpy[i]);
+		if (so_long->map[i] != NULL)
 			free(so_long->map[i]);
-		}
 		i++;
 	}
-	free(so_long->map_cpy);
 	free(so_long->map);
 	exit(1);
 }

@@ -1,53 +1,30 @@
-
-SRCS = main.c check_map_name.c error.c error2.c map.c map2.c map3.c move.c	\
-
+NAME = so_long
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g -L./mlx -lmlx -framework AppKit -framework OpenGL
+SRCS =  main.c error.c check_map.c move.c check_map_name.c game_finish.c create_map.c fill_flood.c read_map.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c ft_printf/ft_printf.c ft_printf/ft_printf_utils.c
 
 OBJS = $(SRCS:.c=.o)
-CC = gcc
-RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -g -Iheaders/
-
-NAME = so_long
-
-MLX_PATH = ./mlx
-LIBFT_PATH = ./libft
-FT_PRINTF_PATH = ./printf
-GET_NEXT_LINE_PATH = ./getnextline
-
-MLX = libmlx.a
-LIBFT = libft.a
-FT_PRINTF = libftprintf.a
-GET_NEXT_LINE = libftgnl.a
-
-LIBRARY = -L $(MLX_PATH) -lmlx -framework OpenGL -framework AppKit
-
-MLX_ARCH = $(MLX_PATH)/$(MLX)
-LIBFT_ARCH = $(LIBFT_PATH)/$(LIBFT)
-FT_PRINTF_ARCH = $(FT_PRINTF_PATH)/$(FT_PRINTF)
-GET_NEXT_LINE_ARCH = $(GET_NEXT_LINE_PATH)/$(GET_NEXT_LINE)
+MINI = ./mlx/libmlx.a
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	make -s -C $(MLX_PATH) -j16 2> /dev/null
-	make -s -C $(LIBFT_PATH)
-	make -s -C $(FT_PRINTF_PATH)
-	make -s -C $(GET_NEXT_LINE_PATH)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_ARCH) $(FT_PRINTF_ARCH) $(GET_NEXT_LINE_ARCH) $(LIBRARY) -o $(NAME)
+$(MINI):
+		make -C ./mlx &> /dev/null
+
+$(NAME): $(MINI) $(OBJS)
+		$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+%.o: %.c
+		$(CC) -c $^ -o $@ -Wall -Wextra -Werror
 
 clean:
-	@$(RM) $(OBJS)
-	@make -s -C $(LIBFT_PATH) clean
-	@make -s -C $(FT_PRINTF_PATH) clean
-	@make -s -C $(GET_NEXT_LINE_PATH) clean
-	@make -s -C $(MLX_PATH) clean
+		rm -rf $(OBJS)
+		make clean -C mlx/
 
 fclean: clean
-	@$(RM) $(NAME)
-	@make -s -C $(LIBFT_PATH) fclean
-	@make -s -C $(FT_PRINTF_PATH) fclean
-	@make -s -C $(GET_NEXT_LINE_PATH) fclean
+		rm -rf $(NAME)
+		make clean -C mlx/
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: fclean re all clean
